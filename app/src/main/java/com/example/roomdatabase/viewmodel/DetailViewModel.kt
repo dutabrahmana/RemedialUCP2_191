@@ -37,9 +37,7 @@ class DetailViewModel(
         )
 
     suspend fun deleteBuku() {
-        // Implementasi delete logic
-        // repositoriPerpustakaan.deleteBuku(...)
-        // Perlu mengambil current state buku
+    
         val currentState = detailUiState.value
         if (currentState is DetailUiState.Success) {
             repositoriPerpustakaan.deleteBuku(currentState.buku)
