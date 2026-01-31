@@ -34,7 +34,6 @@ interface RepositoriPerpustakaan {
     fun getAllPenulis(): Flow<List<Penulis>>
     suspend fun insertPenulis(penulis: Penulis)
     
-    // Audit & Fisik
     fun getAllAuditLogs(): Flow<List<AuditLog>>
 }
 
@@ -82,38 +81,30 @@ class OfflineRepositoriPerpustakaan(
         }
     }
 
-    // Logika Hapus yang Kompleks
     override suspend fun deleteKategori(kategoriId: Int, deleteBooks: Boolean) {
         db.withTransaction {
-            // 1. Cek Buku Dipinjam di kategori ini
             val bukuDipinjam = bukuFisikDao.cekBukuDipinjamDiKategori(kategoriId)
             if (bukuDipinjam.isNotEmpty()) {
                 throw Exception("Gagal menghapus! Ada buku yang sedang dipinjam dalam kategori ini.")
             }
 
-            // 2. Ambil Kategori untuk audit (sebelum update)
             val kategori = kategoriDao.getKategori(kategoriId).first()
 
-            // 3. Proses Buku Children
             val bukuList = bukuDao.getBukuByKategori(kategoriId).first()
             if (bukuList.isNotEmpty()) {
                 if (deleteBooks) {
-                    // Soft Delete semua buku
                     bukuList.forEach { buku ->
                         bukuDao.update(buku.copy(isDeleted = true))
                     }
                 } else {
-                    // Pindahkan ke "Tanpa Kategori" (null)
                     bukuList.forEach { buku ->
                         bukuDao.update(buku.copy(idKategori = null))
                     }
                 }
             }
 
-            // 4. Soft Delete Kategori
             kategoriDao.update(kategori.copy(isDeleted = true))
             
-            // 5. Audit Log
             auditLogDao.insert(
                 AuditLog(
                     entityName = "Kategori",
@@ -125,8 +116,6 @@ class OfflineRepositoriPerpustakaan(
         }
     }
     
-    // --- Helper Validation ---
-    
     private fun validateKategori(kategori: Kategori) {
         if (kategori.nama.isBlank()) throw IllegalArgumentException("Nama Kategori tidak boleh kosong")
     }
@@ -135,7 +124,6 @@ class OfflineRepositoriPerpustakaan(
         if (parentId == null) return
         if (childId == parentId) throw IllegalArgumentException("Cyclic Reference: Kategori tidak bisa menjadi induk dirinya sendiri")
         
-        // Traverse up
         var currentParentId = parentId
         while (currentParentId != null) {
             if (currentParentId == childId) {
@@ -145,8 +133,6 @@ class OfflineRepositoriPerpustakaan(
             currentParentId = parentNode.parentKategoriId
         }
     }
-
-    // --- Buku Methods ---
 
     override fun getAllBuku(): Flow<List<Buku>> = bukuDao.getAllBuku()
     override fun getAllBukuWithKategori(): Flow<List<BukuWithKategori>> = bukuDao.getAllBukuWithKategori()
@@ -175,7 +161,6 @@ class OfflineRepositoriPerpustakaan(
         }
     }
 
-    // --- Penulis Methods ---
     override fun getAllPenulis(): Flow<List<Penulis>> = penulisDao.getAllPenulis()
     
     override suspend fun insertPenulis(penulis: Penulis) {

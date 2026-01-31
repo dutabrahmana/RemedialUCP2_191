@@ -26,7 +26,6 @@ interface KategoriDao {
     @Query("SELECT * FROM kategori WHERE isDeleted = 0 ORDER BY nama ASC")
     fun getAllKategori(): Flow<List<Kategori>>
 
-
     @Query("SELECT * FROM kategori WHERE parentKategoriId = :parentId AND isDeleted = 0")
     fun getSubKategori(parentId: Int): Flow<List<Kategori>>
 }
@@ -70,7 +69,6 @@ interface BukuDao {
     @Query("SELECT * FROM buku WHERE idKategori = :kategoriId AND isDeleted = 0")
     fun getBukuByKategori(kategoriId: Int): Flow<List<Buku>>
 
-    // Insert CrossRef
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertBukuPenulis(crossRef: BukuPenulisCrossRef)
 }
