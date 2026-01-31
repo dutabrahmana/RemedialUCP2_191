@@ -11,8 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,8 +29,6 @@ fun HalamanEdit(
     viewModel: EditViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
-    // Collect categories
-    val listKategori by viewModel.listKategori.collectAsState()
     
     Scaffold(
         topBar = {
@@ -50,11 +46,10 @@ fun HalamanEdit(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            // Pass listKategori to Form
+            // FormInputBuku tanpa param listKategori
             FormInputBuku(
                 detailBuku = viewModel.bukuUiState,
                 onValueChange = viewModel::updateUiState,
-                listKategori = listKategori,
                 modifier = Modifier.fillMaxWidth()
             )
             Button(

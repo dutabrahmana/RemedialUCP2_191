@@ -26,7 +26,7 @@ interface KategoriDao {
     @Query("SELECT * FROM kategori WHERE isDeleted = 0 ORDER BY nama ASC")
     fun getAllKategori(): Flow<List<Kategori>>
 
-    // Mencari semua kategori yang memiliki parent tertentu
+
     @Query("SELECT * FROM kategori WHERE parentKategoriId = :parentId AND isDeleted = 0")
     fun getSubKategori(parentId: Int): Flow<List<Kategori>>
 }

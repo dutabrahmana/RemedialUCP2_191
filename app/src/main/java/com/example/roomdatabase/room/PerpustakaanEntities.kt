@@ -62,8 +62,8 @@ data class BukuFisik(
     @PrimaryKey(autoGenerate = true)
     val idBukuFisik: Int = 0,
     val idBuku: Int,
-    val kondisi: String, // "Baik", "Rusak"
-    val statusPeminjaman: String, // "Tersedia", "Dipinjam", "Hilang"
+    val kondisi: String,
+    val statusPeminjaman: String,
     val lokasiRak: String
 )
 
@@ -83,7 +83,7 @@ data class AuditLog(
     val idAudit: Int = 0,
     val entityName: String,
     val entityId: Int,
-    val action: String, // "INSERT", "UPDATE", "DELETE", "SOFT_DELETE"
+    val action: String,
     val timestamp: Long = System.currentTimeMillis(),
     val catatan: String
 )

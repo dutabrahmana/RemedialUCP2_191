@@ -35,7 +35,7 @@ abstract class DatabasePerpustakaan : RoomDatabase() {
                     DatabasePerpustakaan::class.java,
                     "perpustakaan_database"
                 )
-                    .fallbackToDestructiveMigration() // Hapus database lama jika schema berubah (untuk dev)
+                    .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
             }

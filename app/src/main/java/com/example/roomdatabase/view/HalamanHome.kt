@@ -87,7 +87,7 @@ fun HalamanHome(
             }
         },
     ) { innerPadding ->
-        when (val state = homeUiState) { // Handle sealed class state explicitly for safety
+        when (val state = homeUiState) {
             is HomeUiState.Loading -> {
                 // Show loading
                 Text(text = "Loading...", modifier = Modifier.padding(innerPadding))

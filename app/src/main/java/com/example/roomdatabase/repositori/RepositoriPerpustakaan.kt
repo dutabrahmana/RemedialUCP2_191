@@ -57,7 +57,7 @@ class OfflineRepositoriPerpustakaan(
             auditLogDao.insert(
                 AuditLog(
                     entityName = "Kategori",
-                    entityId = 0, // ID generate otomatis, mungkin tidak akurat di sini tanpa return value insert
+                    entityId = 0,
                     action = "INSERT",
                     catatan = "Menambahkan kategori: ${kategori.nama}"
                 )

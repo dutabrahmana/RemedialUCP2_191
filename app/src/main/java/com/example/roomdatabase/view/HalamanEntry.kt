@@ -9,10 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -24,10 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.KeyboardType
@@ -49,7 +44,6 @@ fun HalamanEntry(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val listKategori by viewModel.listKategori.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel.snackbarMessage) {
@@ -81,7 +75,6 @@ fun HalamanEntry(
                     }
                 }
             },
-            listKategori = listKategori,
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
@@ -95,7 +88,6 @@ fun EntryBody(
     uiStateBuku: DetailBuku,
     onBukuValueChange: (DetailBuku) -> Unit,
     onSaveClick: () -> Unit,
-    listKategori: List<Kategori>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -108,7 +100,6 @@ fun EntryBody(
         FormInputBuku(
             detailBuku = uiStateBuku,
             onValueChange = onBukuValueChange,
-            listKategori = listKategori, // Passing list kategori ke form
             modifier = Modifier.fillMaxWidth()
         )
         
@@ -122,21 +113,13 @@ fun EntryBody(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInputBuku(
     detailBuku: DetailBuku,
     onValueChange: (DetailBuku) -> Unit,
-    listKategori: List<Kategori>,
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    // State untuk dropdown
-    var expanded by remember { mutableStateOf(false) }
-    
-    // Cari nama kategori yang sedang dipilih berdasarkan ID
-    val selectedKategori = listKategori.find { it.idKategori == detailBuku.idKategori }
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -166,46 +149,18 @@ fun FormInputBuku(
             singleLine = true
         )
         
-        // Dropdown Kategori
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
-        ) {
-            OutlinedTextField(
-                value = selectedKategori?.nama ?: "",
-                onValueChange = {}, // Read only, karena memilih dari list
-                readOnly = true,
-                label = { Text("Kategori") },
-                placeholder = { Text("Pilih Kategori") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-                modifier = Modifier
-                    .menuAnchor()
-                    .fillMaxWidth(),
-                enabled = enabled
-            )
-            
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                if (listKategori.isEmpty()) {
-                     DropdownMenuItem(
-                        text = { Text("Belum ada kategori. Tambah dulu?") },
-                        onClick = { expanded = false }
-                    )
-                } else {
-                    listKategori.forEach { kategori ->
-                        DropdownMenuItem(
-                            text = { Text(text = kategori.nama) },
-                            onClick = {
-                                onValueChange(detailBuku.copy(idKategori = kategori.idKategori))
-                                expanded = false
-                            }
-                        )
-                    }
-                }
-            }
-        }
+        // Manual ID Input (Reverted)
+        OutlinedTextField(
+            value = detailBuku.idKategori?.toString() ?: "",
+            onValueChange = {
+                onValueChange(detailBuku.copy(idKategori = it.toIntOrNull()))
+            },
+            label = { Text("ID Kategori") },
+            placeholder = { Text("Masukkan Angka ID Kategori") },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true
+        )
     }
 }

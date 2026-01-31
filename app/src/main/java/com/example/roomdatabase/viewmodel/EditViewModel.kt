@@ -7,13 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roomdatabase.repositori.RepositoriPerpustakaan
-import com.example.roomdatabase.room.Kategori
 import com.example.roomdatabase.view.route.DestinasiEdit
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class EditViewModel(
@@ -25,14 +21,6 @@ class EditViewModel(
         private set
 
     private val itemId: Int = checkNotNull(savedStateHandle[DestinasiEdit.itemIdArg])
-    
-    // Provide categories list for Dropdown in Edit Form
-    val listKategori: StateFlow<List<Kategori>> = repositoriPerpustakaan.getAllKategori()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = listOf()
-        )
 
     init {
         viewModelScope.launch {
@@ -54,7 +42,6 @@ class EditViewModel(
     }
     
     private fun validasiInput(uiState: DetailBuku = bukuUiState): Boolean {
-        // Minimal ada Judul. Kategori optional tapi sebaiknya ada.
         return uiState.judul.isNotBlank()
     }
 }
