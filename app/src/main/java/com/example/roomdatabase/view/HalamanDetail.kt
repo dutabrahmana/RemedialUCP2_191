@@ -95,7 +95,7 @@ fun HalamanDetail(
             DeleteConfirmationDialog(
                 onDeleteConfirm = {
                     deleteConfirmationRequired = false
-                    // Trigger delete logic here
+                    
                 },
                 onDeleteCancel = { deleteConfirmationRequired = false }
             )

@@ -11,7 +11,7 @@ data class Kategori(
     val idKategori: Int = 0,
     val nama: String,
     val deskripsi: String,
-    val parentKategoriId: Int? = null, // Self-referencing untuk hierarki
+    val parentKategoriId: Int? = null, 
     val isDeleted: Boolean = false
 )
 
@@ -31,7 +31,7 @@ data class Penulis(
             entity = Kategori::class,
             parentColumns = ["idKategori"],
             childColumns = ["idKategori"],
-            onDelete = ForeignKey.RESTRICT // Prevent hard delete if linked
+            onDelete = ForeignKey.RESTRICT
         )
     ],
     indices = [Index(value = ["idKategori"])]
@@ -42,7 +42,7 @@ data class Buku(
     val judul: String,
     val deskripsi: String,
     val tanggalTerbit: String,
-    val idKategori: Int?, // Nullable jika "Tanpa Kategori" setelah delete parent
+    val idKategori: Int?, 
     val isDeleted: Boolean = false
 )
 

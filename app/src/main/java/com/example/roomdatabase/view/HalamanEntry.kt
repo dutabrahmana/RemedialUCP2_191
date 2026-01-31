@@ -94,7 +94,7 @@ fun EntryBody(
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = modifier.padding(16.dp)
     ) {
-        // Form Entry Buku
+      
         Text(text = "Input Buku", style = MaterialTheme.typography.titleMedium)
         
         FormInputBuku(
@@ -149,7 +149,6 @@ fun FormInputBuku(
             singleLine = true
         )
         
-        // Manual ID Input (Reverted)
         OutlinedTextField(
             value = detailBuku.idKategori?.toString() ?: "",
             onValueChange = {

@@ -69,7 +69,7 @@ fun HalamanHome(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.padding(16.dp)
             ) {
-                // Tombol Tambah Kategori
+              
                 ExtendedFloatingActionButton(
                     onClick = navigateToKategoriEntry,
                     icon = { Icon(Icons.Default.List, contentDescription = "Tambah Kategori") },
@@ -78,7 +78,7 @@ fun HalamanHome(
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                 )
                 
-                // Tombol Tambah Buku
+               
                 ExtendedFloatingActionButton(
                     onClick = navigateToItemEntry,
                     icon = { Icon(Icons.Default.Add, contentDescription = "Tambah Buku") },
@@ -89,7 +89,7 @@ fun HalamanHome(
     ) { innerPadding ->
         when (val state = homeUiState) {
             is HomeUiState.Loading -> {
-                // Show loading
+              
                 Text(text = "Loading...", modifier = Modifier.padding(innerPadding))
             }
             is HomeUiState.Error -> {
@@ -172,7 +172,7 @@ fun DataBukuItem(
                     text = "Terbit: ${bukuWithKategori.buku.tanggalTerbit}",
                     style = MaterialTheme.typography.bodySmall
                 )
-                // Menampilkan Nama Kategori
+               
                 Text(
                     text = bukuWithKategori.kategori?.nama ?: "Tanpa Kategori",
                     style = MaterialTheme.typography.labelMedium,
